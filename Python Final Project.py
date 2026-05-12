@@ -24,7 +24,7 @@ class Vehicle(ABC):
         # exact entry time
         self.entry_time = datetime.now()
 
-        # default type (overwritten in subclasses)
+        # default type 
         self.vehicle_type = "Vehicle"
 
         # VIP status for discount feature
@@ -77,4 +77,27 @@ class Vehicle(ABC):
             f"Hours: {self.get_duration()} | "
             f"{vip_text}"
         )
+    
+    #CAR CLASS
 
+class Car(Vehicle): 
+
+    def __init__(self, license_plate, is_vip=False):
+
+        super().__init__(license_plate, is_vip)
+    
+        self.vehicle_type = "Car"
+            
+
+    def calculate_fee(self): 
+
+        fee = self.get_duration()*2
+        return self._apply_special_pricing(fee)
+
+#Truck Class
+
+class Truck(Vehicle):
+
+    def __init__(self, license_plate, is_vip=False):
+        
+        super().__init__(license_plate, is_vip)
