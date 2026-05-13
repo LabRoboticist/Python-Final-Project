@@ -1,14 +1,4 @@
 # SMART PARKING GARAGE SIMULATION
-# This program simulates a smart parking garage system.
-# The system can:
-# - Check vehicles in and out
-# - Track parking duration automatically
-# - Calculate parking fees
-# - Save garage data using pickle
-# - Display everything in a tkinter GUI
-# - Filter/search parked vehicles
-# - Apply VIP discounts and peak hour pricing
-
 
 # tkinter is used to create the graphical user interface
 import tkinter as tk
