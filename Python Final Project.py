@@ -127,12 +127,12 @@ class Vehicle(ABC):
             f"{vip_text}"
         )
 
-
 # Car inherits from Vehicle.
 # Cars use the standard parking rate.
 #Creates Car subclass - inherents from Vehicle 
 #automatically gains the entry time, duration logic, VIP logic, and printing logic
 class Car(Vehicle):
+
     def __init__(self, license_plate, is_vip=False):
 
         # Calls the constructor from the parent Vehicle class
@@ -155,16 +155,19 @@ class Car(Vehicle):
 # Truck inherits from Vehicle.
 # Trucks have higher rates because they take up more space.
 class Truck(Vehicle):
+
     def __init__(self, license_plate, is_vip=False):
 
         super().__init__(license_plate, is_vip)
+
         self.vehicle_type = "Truck"
-        
+
     # Trucks override calculate_fee using their own pricing.
     def calculate_fee(self):
 
         # Trucks cost $3.50 per hour
         fee = self.get_duration() * 3.5
+
         return self.apply_special_pricing(fee)
 
 # Motorcycles use lower parking rates.
@@ -190,6 +193,7 @@ class Motorcycle(Vehicle):
 # ParkingGarage acts as the main control center for the program.
 # It manages all vehicles currently parked.
 class ParkingGarage:
+
     def __init__(self):
 
         # Dictionary storage:
@@ -216,11 +220,17 @@ class ParkingGarage:
 
         # Creates the correct object based on vehicle type
         if vehicle_type == "Car":
+
             vehicle = Car(plate, is_vip)
+
         elif vehicle_type == "Truck":
+
             vehicle = Truck(plate, is_vip)
+
         elif vehicle_type == "Motorcycle":
+
             vehicle = Motorcycle(plate, is_vip)
+
         else:
             raise ValueError("Invalid vehicle type.")
 
@@ -232,6 +242,7 @@ class ParkingGarage:
 
     # Handles vehicle checkout.
     def check_out(self, plate):
+
         plate = plate.strip().upper()
 
         # Prevents checkout of vehicles not in garage
@@ -246,16 +257,20 @@ class ParkingGarage:
 
         # Saves updated garage state
         self.save_data()
+
         return vehicle, fee
 
     # Saves garage data into a pickle file.
     def save_data(self):
+
         try:
+
             # "wb" means write binary
             with open("garage_data.pkl", "wb") as file:
 
                 # pickle.dump serializes the dictionary
                 pickle.dump(self.vehicles, file)
+
         except Exception as e:
 
             # Displays popup error instead of crashing
@@ -263,6 +278,7 @@ class ParkingGarage:
 
     # Loads saved garage data back into the program.
     def load_data(self):
+
         try:
 
             # Prevents errors if file doesn't exist yet
@@ -273,8 +289,10 @@ class ParkingGarage:
 
                     # Restores the dictionary from file
                     self.vehicles = pickle.load(file)
+
             else:
                 self.vehicles = {}
+
         except Exception:
 
             # Starts with empty dictionary if file is corrupted
@@ -282,17 +300,25 @@ class ParkingGarage:
 
     # Returns only vehicles matching the selected type.
     def filter_by_type(self, vehicle_type):
+
         return [
+
             vehicle
+
             for vehicle in self.vehicles.values()
+
             if vehicle.vehicle_type == vehicle_type
         ]
 
     # Finds vehicles parked longer than a specified number of hours.
     def parked_longer_than(self, hours):
+
         return [
+
             vehicle
+
             for vehicle in self.vehicles.values()
+
             if vehicle.get_duration() > hours
         ]
 
@@ -300,26 +326,20 @@ class ParkingGarage:
 garage = ParkingGarage()
 
 import tkinter as tk
-
-    ttk.Button(self.center_frame, text="Check In", command=check_in, style="Dark.TButton").pack(side=tk.LEFT, padx=5)
+#---------------------------------------------------INSERT CLASS METHODS HERE---------------------------------------------------#        ttk.Button(self.center_frame, text="Check In", command=check_in, style="Dark.TButton").pack(side=tk.LEFT, padx=5)
 
 # These functions connect the GUI directly
 # to the ParkingGarage backend logic.
 
-
 def check_in():
 
     try:
-
         # Gets license plate from entry box
         plate = app.vehicle_entry.get()
-
         # Gets selected vehicle type
         vehicle_type = app.status_dropdown.get()
-
         # Gets VIP checkbox state
         is_vip = app.confirm_var.get()
-
         # Calls backend garage check-in method
         garage.check_in(
 
@@ -343,7 +363,6 @@ def check_in():
         # Prevents GUI crashes
         app.update_status(str(e))
 
-
 def check_out():
 
     try:
@@ -366,7 +385,6 @@ def check_out():
 
         app.update_status(str(e))
 
-
 def view_all():
 
     # Displays all parked vehicles
@@ -374,15 +392,12 @@ def view_all():
 
     app.update_status("Showing all parked vehicles.")
 
-
 def show_trucks():
 
     # Shows only truck objects
     refresh_inventory(vehicle_type="Truck")
 
     app.update_status("Showing only trucks.")
-
-
 def parked_hours():
 
     # Shows vehicles parked longer than 1 hour
@@ -391,7 +406,6 @@ def parked_hours():
     app.update_status(
         "Showing vehicles parked longer than 1 hour."
     )
-
 
 # Drop-down option placeholders
 # These placeholder functions represent each dropdown choice.
@@ -499,24 +513,17 @@ def refresh_inventory(vehicle_type=None, hours_filter=None):
 
 
 def show_license_plate_inventory():
-
     refresh_inventory()
-
 
 def show_vehicle_type_inventory():
-
     refresh_inventory()
 
-
 def show_hours_parked_inventory():
-
     refresh_inventory()
 
 
 def show_vip_status_inventory():
-
     refresh_inventory()
-
 
 class GUI:
     def __init__(self):
@@ -852,7 +859,6 @@ class GUI:
     def run(self):
         # Start the tkinter event loop
         self.root.mainloop()
-
 
 # Run the GUI only when this file is executed directly
 if __name__ == "__main__":
