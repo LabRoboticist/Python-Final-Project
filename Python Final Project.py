@@ -1,51 +1,69 @@
 # SMART PARKING GARAGE SIMULATION
 
-# tkinter is used to create the graphical user interface
+# tkinter is used to create the graphical user interface 
 import tkinter as tk
 
 # ttk gives access to advanced widgets like Treeview tables
+#ttk provides themed widgets
 # messagebox creates popup error windows
 from tkinter import ttk, messagebox
 
 # datetime allows the program to track exact entry times
+#calculate parking duration
+#determine peak pricing hours
 from datetime import datetime
 
 # ABC and abstractmethod are used to create an abstract base class
+#Imports tools for abstract classes.
+#ABC - Allows Vehicle to become a parent template class.
+#abstractmethod - Forces subclasses to create required methods.
+#every vehicle MUST define calculate_fee()
 from abc import ABC, abstractmethod
 
 # pickle allows Python objects to be saved into a file
 import pickle
 
 # os helps check if save files already exist
+#helps-checking if save files exist
 import os
 
 
 # Vehicle is the parent class for all vehicle types.
 # Since every vehicle shares common features,
 # inheritance makes the program more organized.
+#Creates the Vehicle class.
+#This class inherits from: ABC, making it an abstract base class
 class Vehicle(ABC):
 
     # This constructor runs whenever a new vehicle object is created.
+    #self - the object itself
+    #license_plate - vehicle identifier
+    #is_vip=False - optional VIP status
     def __init__(self, license_plate, is_vip=False):
 
-        # Stores the vehicle's license plate
+        # Stores the vehicle's license plate number inside the object.
         self.license_plate = license_plate
 
         # Saves the exact time the vehicle entered the garage
         self.entry_time = datetime.now()
 
         # Default type before subclasses overwrite it
+        #Sets a default type.
         self.vehicle_type = "Vehicle"
 
         # Tracks whether the vehicle has VIP status
+        #Stores whether the vehicle is VIP.
+        #This will later be used for discounts, GUI display, and special pricing.
         self.is_vip = is_vip
 
-    # Every subclass MUST create its own calculate_fee method.
-    # This is required for polymorphism.
+    # Every subclass has to create its own calculate_fee method, because we have changes in the price rate.
+    # Needed for polymorphism.
+    #Marks the next method as abstract.
     @abstractmethod
     def calculate_fee(self):
         pass
 
+    # Creates a method to calculate parking duration.
     # Calculates how long the vehicle has been parked.
     def get_duration(self):
 
@@ -59,52 +77,71 @@ class Vehicle(ABC):
         return round(hours, 2)
 
     # Checks whether the current time falls during peak hours.
+    #Creates a method to determine if peak pricing should apply.
     def is_peak_hour(self):
 
-        # Gets current hour using military time
+        # I used military time
+        #Gets only the hour portion of current time.
         current_hour = datetime.now().hour
 
         # Peak hours are from 5 PM to 8 PM
+        #True if between 5 PM and 8 PM
         return 17 <= current_hour <= 20
 
     # Applies dynamic pricing rules.
     # Peak hours increase prices and VIP vehicles receive discounts.
+    #Creates pricing modification method.
+    # takes the base fee and then applies peak pricing and VIP discount
     def apply_special_pricing(self, fee):
 
         # Peak hour pricing multiplier
+        #Checks if current time is peak hour.
         if self.is_peak_hour():
             fee *= 1.5
 
         # VIP vehicles receive 20% off
+        #Checks VIP status.
+        #Applies 20% discount.
         if self.is_vip:
             fee *= 0.8
 
         return round(fee, 2)
+        #I set it to return the final fee rounded to 2 decimals.
 
     # Controls how the object prints when displayed.
+    #Python needs this to print readable memory addresses
     def __str__(self):
 
         # Converts VIP status into readable text
+        #Uses a ternary operator.
         vip_text = "VIP" if self.is_vip else "Regular"
 
         return (
+            #displays Car, Truck, or Motorcycle
             f"{self.vehicle_type} | "
+            #Displays license plate
             f"Plate: {self.license_plate} | "
+            #Displays parked duration
             f"Hours Parked: {self.get_duration()} | "
+            #Displays VIP Status
             f"{vip_text}"
         )
 
 
 # Car inherits from Vehicle.
 # Cars use the standard parking rate.
+#Creates Car subclass - inherents from Vehicle 
+#automatically gains the entry time, duration logic, VIP logic, and printing logic
 class Car(Vehicle):
 
     def __init__(self, license_plate, is_vip=False):
 
         # Calls the constructor from the parent Vehicle class
+        #Calls the parent constructor - initializes the license plate, entry time, and VIP Status
         super().__init__(license_plate, is_vip)
 
         # Sets the specific vehicle type
+        #Overwrite the default type
         self.vehicle_type = "Car"
 
     # Cars calculate fees differently than other vehicle types.
@@ -113,7 +150,7 @@ class Car(Vehicle):
         # Cars cost $2 per hour
         fee = self.get_duration() * 2
 
-        # Applies VIP discounts and peak hour pricing
+        # Applies VIP discounts and peak hour pricing before returning the fee
         return self.apply_special_pricing(fee)
 
 
@@ -141,8 +178,11 @@ class Motorcycle(Vehicle):
 
     def __init__(self, license_plate, is_vip=False):
 
+        # Calls the constructor from the parent Vehicle class
+        #Calls the parent constructor - initializes the license plate, entry time, and VIP Status
         super().__init__(license_plate, is_vip)
 
+        #sets type
         self.vehicle_type = "Motorcycle"
 
     # Motorcycles calculate fees using a cheaper rate.
