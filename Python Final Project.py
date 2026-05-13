@@ -300,8 +300,6 @@ class ParkingGarage:
 garage = ParkingGarage()
 
 import tkinter as tk
-from tkinter import ttk
-
 
 #---------------------------------------------------INSERT CLASS METHODS HERE---------------------------------------------------#        ttk.Button(self.center_frame, text="Check In", command=check_in, style="Dark.TButton").pack(side=tk.LEFT, padx=5)
 
@@ -524,7 +522,7 @@ class GUI:
     def __init__(self):
         # Initialize the main application window
         self.root = tk.Tk()
-        self.root.title("Doug the dougster's app :P")
+        self.root.title("Doug & London Intelligent Parking :P")
         self.root.geometry("800x600")  # Set the window dimensions to 800x600 pixels
         self.root.resizable(False, False)  # Disable manual window resizing
 
@@ -577,6 +575,14 @@ class GUI:
         ttk.Button(self.center_frame, text="Check In", command=check_in, style="Dark.TButton").pack(side=tk.LEFT, padx=5)
         ttk.Button(self.center_frame, text="Check Out", command=check_out, style="Dark.TButton").pack(side=tk.LEFT, padx=5)
         ttk.Button(self.center_frame, text="View All", command=view_all, style="Dark.TButton").pack(side=tk.LEFT, padx=5)
+
+        ttk.Button(
+    self.center_frame,
+    text="Search",
+    command=view_all,
+    style="Dark.TButton"
+).pack(side=tk.LEFT, padx=5)
+    
         ttk.Button(self.center_frame, text="Show Trucks", command=show_trucks, style="Dark.TButton").pack(side=tk.LEFT, padx=5)
         ttk.Button(self.center_frame, text="Parked > Hours", command=parked_hours, style="Dark.TButton").pack(side=tk.LEFT, padx=5)
 
@@ -614,7 +620,7 @@ class GUI:
         # Title label shown in the main frame
         self.title_label = ttk.Label(
             self.main_frame,
-            text="Welcome To the dougster's garage :D",
+            text="Welcome To Doug & London Intelligent Parking :D",
             font=("Segoe UI", 16),
             style="Dark.TLabel",
         )
@@ -802,7 +808,7 @@ class GUI:
         # Bold green subscription text inside the popup
         popup_message = ttk.Label(
             popup_frame,
-            text="Join Our Monthly Subscription to become a lookcrative dougstrer VIP :)",
+            text="Join Our Monthly Subscription to become a lookcrative Doug & London Intelligent Parking VIP :)",
             font=("Segoe UI", 10, "bold"),
             foreground="lime",
             background="black",
